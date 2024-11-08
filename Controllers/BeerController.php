@@ -36,4 +36,25 @@ class BeerController extends BaseController
   {
     self::loadView('beers/form');
   }
+
+
+  public static function save()
+  {
+    $beers = new BeerModel();
+    $beers->name = $_POST['name'];
+    $beers->description = $_POST['description'];
+    $beers->type_id = $_POST['type_id'];
+    $beers->brewery_id = $_POST['brewery_id'];
+    $beers->image_url = $_POST['image_url'];
+    $beers->alcohol_percentage = $_POST['alcohol_percentage'];
+
+
+    $succes = $beers->save();
+
+    if ($succes) {
+      self::redirect('/beers');
+    } else {
+      echo 'Er is iets misgegaan';
+    }
+  }
 }

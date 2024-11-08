@@ -16,7 +16,25 @@ class BeerModel extends BaseModel
 
     return self::castToModel($db_items);
   }
-  protected $table = 'beers'; // Naam van de tabel in de database
-  protected $pk = 'beer_id';   // Primaire sleutel van de tabel
 
+  public function save()
+  {
+    // print_r('Doe de save van een cocktail');
+    $sql = "INSERT INTO `beers` (`name`, `description`, `type_id`, `brewery_id`, `image_url`, `alcohol_percentage`) VALUES ( :name, :description, :type_id, :brewery_id, :image_url, :alcohol_percentage)";
+
+    $pdo_statement = $this->db->prepare($sql);
+    $succes =  $pdo_statement->execute([
+      ':name' => $this->name,
+      ':description' => $this->description,
+      ':type_id' => $this->type_id,
+      ':brewery_id' => $this->brewery_id,
+      ':image_url' => $this->image_url,
+      ':alcohol_percentage' => (float)$this->alcohol_percentage
+    ]);
+
+    return $succes;
+  }
+  protected $table = 'beers';
+
+  protected $pk = 'beer_id';
 }
