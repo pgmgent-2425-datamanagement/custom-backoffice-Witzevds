@@ -12,12 +12,28 @@ class BeerController extends BaseController
     // Instantiate both models
     $beerModel = new BeerModel();
     $reviewModel = new ReviewModel();
-
+    $search = $_GET['search'] ?? '';
     // Fetch data from each model
-    $beers = $beerModel->all();
-    $reviews = $reviewModel->all();
+    $beers = $beerModel::search($search);
+    $reviews = $reviewModel::all();
+    //zoekterm opvangen
 
+
+    print_r($search);
     // Pass both beers and reviews data to the view
-    self::loadview('/beers', ['beers' => $beers, 'reviews' => $reviews]);
+    self::loadview('/beers/beers', ['beers' => $beers, 'reviews' => $reviews]);
+  }
+
+  public static function detail($id)
+  {
+
+    self::loadView('beers/detail', [
+      'beers' => BeerModel::find($id)
+    ]);
+  }
+
+  public static function add()
+  {
+    self::loadView('beers/form');
   }
 }

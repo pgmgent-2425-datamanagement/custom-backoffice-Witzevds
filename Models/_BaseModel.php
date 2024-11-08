@@ -47,7 +47,7 @@ class BaseModel
         }
     }
 
-    public function all()
+    private function all()
     {
 
         $sql = 'SELECT * FROM `' . $this->table . '`';
@@ -59,7 +59,7 @@ class BaseModel
         return self::castToModel($db_items);
     }
 
-    public function find(int $id)
+    private function find(int $id)
     {
 
         $sql = 'SELECT * FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :p_id';
@@ -118,6 +118,10 @@ class BaseModel
 
     private function getClassName($classname)
     {
-        return (substr($classname, strrpos($classname, '\\') + 1));
+        if (strpos($classname, '\\') === false) {
+            return $classname;
+        }
+
+        return substr($classname, strrpos($classname, '\\') + 1);
     }
 }

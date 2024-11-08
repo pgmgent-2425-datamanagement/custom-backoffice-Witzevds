@@ -16,9 +16,9 @@
 
     <nav>
         <a href="/">Home</a>
-        <a href="beers">beers</a>
-        <a href="reviews">reviews</a>
-        <a href="#">item 4</a>
+        <a href="/beers">beers</a>
+        <a href="/reviews">reviews</a>
+        <a href="/beers/add">add beer</a>
     </nav>
 
     <main>
