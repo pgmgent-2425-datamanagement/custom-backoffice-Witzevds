@@ -10,3 +10,6 @@ $router->get('/reviews', 'ReviewController@reviews');
 $router->get('/beers/add', 'BeerController@add');
 $router->get('/beers/{\d+}', 'BeerController@detail');
 $router->post('/beers/add', 'BeerController@save');
+$router->post('/beers/delete/{id}', function ($id) use ($db) {
+  (new App\Controllers\BeerController())->delete($db, $id);
+});

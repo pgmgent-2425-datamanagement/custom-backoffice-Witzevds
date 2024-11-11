@@ -18,6 +18,11 @@
         <strong>Brewery ID:</strong> <?= htmlspecialchars($beer->brewery_id) ?>
         <a href="/beers/<?= $beer->beer_id; ?>">meer informatie</a>
       </li>
+      <form action="/beers/delete/<?= $beer->beer_id ?>" method="POST">
+        <input type="hidden" name="id" value="<?= $beer->beer_id ?>">
+        <button type="submit">Delete</button>
+      </form>
+
     <?php endforeach; ?>
   <?php else: ?>
     <p>No beers found.</p>

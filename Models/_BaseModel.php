@@ -111,9 +111,12 @@ class BaseModel
     }
 
     //public method to call like: $my_model->delete();
-    public function delete()
+    // BaseModel.php
+    public function delete($id)
     {
-        $this->deleteById($this->pk);
+        $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :id';
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':id' => $id]);
     }
 
     private function getClassName($classname)

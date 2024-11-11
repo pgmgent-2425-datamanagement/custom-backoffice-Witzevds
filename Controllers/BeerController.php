@@ -7,16 +7,16 @@ use App\Models\ReviewModel;
 
 class BeerController extends BaseController
 {
+
   public static function beers()
   {
-    // Instantiate both models
+
     $beerModel = new BeerModel();
     $reviewModel = new ReviewModel();
     $search = $_GET['search'] ?? '';
-    // Fetch data from each model
+
     $beers = $beerModel::search($search);
     $reviews = $reviewModel::all();
-    //zoekterm opvangen
 
 
     print_r($search);
@@ -52,9 +52,17 @@ class BeerController extends BaseController
     $succes = $beers->save();
 
     if ($succes) {
+
       self::redirect('/beers');
     } else {
       echo 'Er is iets misgegaan';
     }
+  }
+
+  public function delete($db, $id)
+  {
+    $beerModel = new BeerModel($db);
+    $beerModel->delete($id);
+    self::redirect('/beers');
   }
 }

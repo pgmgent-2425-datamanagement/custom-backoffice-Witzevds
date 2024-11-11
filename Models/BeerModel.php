@@ -5,6 +5,11 @@ namespace App\Models;
 
 class BeerModel extends BaseModel
 {
+
+  protected $table = 'beers';
+
+  protected $pk = 'beer_id';
+
   protected function search($search)
   {
 
@@ -19,7 +24,6 @@ class BeerModel extends BaseModel
 
   public function save()
   {
-    // print_r('Doe de save van een cocktail');
     $sql = "INSERT INTO `beers` (`name`, `description`, `type_id`, `brewery_id`, `image_url`, `alcohol_percentage`) VALUES ( :name, :description, :type_id, :brewery_id, :image_url, :alcohol_percentage)";
 
     $pdo_statement = $this->db->prepare($sql);
@@ -34,7 +38,37 @@ class BeerModel extends BaseModel
 
     return $succes;
   }
-  protected $table = 'beers';
 
-  protected $pk = 'beer_id';
+
+  public function delete($id)
+  {
+    $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :id';
+    $stmt = $this->db->prepare($sql);
+    return $stmt->execute([':id' => $id]);
+  }
+
+  public function update($id, $data)
+  {
+    $sql = "UPDATE `{$this->table}` SET 
+                `name` = :name, 
+                `description` = :description, 
+                `type_id` = :type_id, 
+                `brewery_id` = :brewery_id, 
+                `image_url` = :image_url, 
+                `alcohol_percentage` = :alcohol_percentage 
+                WHERE `{$this->pk}` = :id";
+
+    $stmt = $this->db->prepare($sql);
+
+    // Bind parameters and execute the statement
+    return $stmt->execute([
+      ':id' => $id,
+      ':name' => $data['name'],
+      ':description' => $data['description'],
+      ':type_id' => $data['type_id'],
+      ':brewery_id' => $data['brewery_id'],
+      ':image_url' => $data['image_url'],
+      ':alcohol_percentage' => $data['alcohol_percentage']
+    ]);
+  }
 }
