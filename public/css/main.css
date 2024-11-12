@@ -295,3 +295,13 @@ img {
 .view-all-link:hover {
   color: #388e3c;
 }
+
+.chart-container {
+  width: 40%;
+  margin: 0 auto 20px; /* Center the chart and add bottom margin */
+}
+
+canvas {
+  width: 100% !important; /* Set the canvas to take full width of the container */
+  height: auto !important; /* Automatically adjust height to maintain aspect ratio */
+}
