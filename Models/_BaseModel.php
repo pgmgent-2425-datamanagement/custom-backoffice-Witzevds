@@ -59,7 +59,7 @@ class BaseModel
         return self::castToModel($db_items);
     }
 
-    private function find(int $id)
+    protected function find(int $id)
     {
 
         $sql = 'SELECT * FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :p_id';
@@ -102,13 +102,6 @@ class BaseModel
         return $item;
     }
 
-    //static method to call like: Model::deleteById(1);
-    public function deleteById(int $id)
-    {
-        $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $id . '` = :p_id';
-        $pdo_statement = $this->db->prepare($sql);
-        return $pdo_statement->execute([':p_id' => $id]);
-    }
 
     //public method to call like: $my_model->delete();
     // BaseModel.php
@@ -118,6 +111,8 @@ class BaseModel
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+
+
 
     private function getClassName($classname)
     {

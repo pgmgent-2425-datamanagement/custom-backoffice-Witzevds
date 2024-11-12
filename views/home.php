@@ -1,2 +1,3 @@
-<h1>Base MVC</h1>
-<p>Welcome to this base mvc project.</p>
+<div class="main-page">
+  <h1>BEER BASE</h1>
+</div>

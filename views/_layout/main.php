@@ -9,25 +9,31 @@
     <link rel="stylesheet" href="/css/main.css?v=<?php if ($_ENV['DEV_MODE'] == "true") {
                                                         echo time();
                                                     }; ?>">
+
+    <link rel="stylesheet" href="/css/reset.css?v=<?php if ($_ENV['DEV_MODE'] == "true") {
+                                                        echo time();
+                                                    }; ?>">
 </head>
 
 <body>
-    <div class="brand">BrandName</div>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/beers">beers</a>
-        <a href="/reviews">reviews</a>
-        <a href="/beers/add">add beer</a>
+
+    <nav class="header">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/beers">beers</a></li>
+            <li><a href="/reviews">reviews</a></li>
+            <li><a href="/beers/add">add beer</a></li>
+            <li><a href="/breweries">breweries</a></li>
+
+        </ul>
+
     </nav>
 
     <main>
         <?= $content; ?>
     </main>
 
-    <footer>
-        &copy; <?= date('Y'); ?> - Beer Viewer
-    </footer>
 </body>
 
 </html>
