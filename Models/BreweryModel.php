@@ -9,6 +9,8 @@ class BreweryModel extends BaseModel
   public $name;
   public $brewery_id;
   public $location;
+  public $alcohol_percentage;
+  public $description;
 
   public function getById($id)
   {

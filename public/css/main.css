@@ -114,7 +114,14 @@ img {
   margin: 0 0 8px;
   color: #333;
 }
+.beer-image {
+  & img {
+    width: 100%;
+    height: auto;
 
+    border-radius: 1rem;
+  }
+}
 .info-link {
   display: inline-block;
   color: #4caf50;

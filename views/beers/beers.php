@@ -10,26 +10,22 @@
 </div>
 
 <!-- Beer List -->
+
+
 <div class="beer-list">
   <?php if (!empty($beers)): ?>
     <?php foreach ($beers as $beer): ?>
       <div class="beer-card">
+
         <div class="beer-info">
-          <?php if (!empty($beer->name)): ?>
-            <p><strong>Name:</strong> <?= htmlspecialchars($beer->name) ?></p>
-          <?php endif; ?>
-          <?php if (!empty($beer->alcohol_percentage)): ?>
-            <p><strong>Alcohol Percentage:</strong> <?= htmlspecialchars($beer->alcohol_percentage) ?>%</p>
-          <?php endif; ?>
-          <?php if (!empty($beer->description)): ?>
-            <p><strong>Description:</strong> <?= htmlspecialchars($beer->description) ?></p>
-          <?php endif; ?>
-          <?php if (!empty($beer->brewery_id)): ?>
-            <p><strong>Brewery ID:</strong> <?= htmlspecialchars($beer->brewery_id) ?></p>
-          <?php endif; ?>
-          <?php if (!empty($beer->location)): ?>
-            <p><strong>Location:</strong> <?= htmlspecialchars($beer->location) ?></p>
-          <?php endif; ?>
+          <p><strong>Name:</strong> <?= htmlspecialchars($beer->name ?? '') ?></p>
+          <p><strong>Alcohol Percentage:</strong> <?= htmlspecialchars($beer->alcohol_percentage ?? '') ?>%</p>
+          <p><strong>Description:</strong> <?= htmlspecialchars($beer->description ?? '') ?></p>
+          <p><strong>Brewery ID:</strong> <?= htmlspecialchars($beer->brewery_id ?? '') ?></p>
+        </div>
+        <div class="beer-image">
+          <!-- Displaying the image -->
+          <img src="<?= htmlspecialchars($beer->image_url) ?>" alt="<?= htmlspecialchars($beer->name) ?>" class="beer-img">
         </div>
         <div class="beer-actions">
           <a href="/beers/<?= $beer->beer_id; ?>" class="info-link">Meer informatie</a>

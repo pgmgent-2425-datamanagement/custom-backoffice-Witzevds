@@ -5,6 +5,12 @@ namespace App\Models;
 
 class BeerModel extends BaseModel
 {
+  public $name;
+  public $description;
+  public $type_id;
+  public $brewery_id;
+  public $image_url;
+  public $alcohol_percentage;
 
   protected $table = 'beers';
 
@@ -53,10 +59,36 @@ class BeerModel extends BaseModel
 
   public function save()
   {
-    $sql = "INSERT INTO `beers` (`name`, `description`, `type_id`, `brewery_id`, `image_url`, `alcohol_percentage`) VALUES ( :name, :description, :type_id, :brewery_id, :image_url, :alcohol_percentage)";
+    // Handling the uploaded image file
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+      $uploadDir = 'uploads/images/'; // Directory where images will be saved
+      $fileName = basename($_FILES['image']['name']);
+      $targetFilePath = $uploadDir . $fileName;
+
+      // Create the upload directory if it doesn't exist
+      if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+      }
+
+      // Move the uploaded file to the target directory
+      if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
+        // Set the image URL to be stored in the database
+        $this->image_url = $targetFilePath;
+      } else {
+        echo "Error uploading the image.";
+        return false;
+      }
+    } else {
+      // If no image is uploaded, set a default or handle the absence accordingly
+      $this->image_url = 'uploads/images/default.jpg'; // Or leave it empty if optional
+    }
+
+    // SQL query to insert the beer data into the database
+    $sql = "INSERT INTO `beers` (`name`, `description`, `type_id`, `brewery_id`, `image_url`, `alcohol_percentage`) 
+              VALUES (:name, :description, :type_id, :brewery_id, :image_url, :alcohol_percentage)";
 
     $pdo_statement = $this->db->prepare($sql);
-    $succes =  $pdo_statement->execute([
+    $success = $pdo_statement->execute([
       ':name' => $this->name,
       ':description' => $this->description,
       ':type_id' => $this->type_id,
@@ -65,7 +97,7 @@ class BeerModel extends BaseModel
       ':alcohol_percentage' => (float)$this->alcohol_percentage
     ]);
 
-    return $succes;
+    return $success;
   }
 
 
