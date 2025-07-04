@@ -1,118 +1,198 @@
-# Base MVC
+# 🎟️ Event Management Backoffice
 
-Dit project bevat een basis opzet van MVC (Model View Controller). En helpt je om sneller te kunnen ontwikkelen, code logisch te groeperen en onderdelen te hergebruiken.
+## 👤 Studentgegevens
 
-## Onderdelen
+- **Naam:** [Jouw Naam]
+- **Studentnummer:** [Jouw Studentnummer]
+- **Klasgroep:** [Jouw klas]
 
-| Functionaliteit | Omschrijving | Locatie |
-| ----------- | ----------- | ----------- |
-| Routing | Beslist wat er moet gebeuren met een URL en stuurt door naar Controller | /app.php |
-| Controller | Krijgt een request binnen op een method, haalt data op uit de model en stuurt dit door naar de juiste view | /Controllers/ |
-| Models | Staat in contact met de database, voert sql opdrachten uit en stuurt resultaat terug | /Models |
-| Views | Bevat de inhoud of een deel van de inhoud van een pagina | /views/... |
-| Templates | Bevat de volledige layout van de pagina | /views/_templates/... |
+---
 
-## Installatie
+## 📝 Overzicht
 
-Installeer de nodige packages via [composer](https://getcomposer.org/).
+Deze applicatie is een **backoffice voor het beheren van evenementen**, gebouwd met een eenvoudige Base MVC-structuur in PHP.
 
-```
-ddev composer install
-```
+Beheerders kunnen:
+- Evenementen aanmaken, bewerken en verwijderen
+- Gebruikers, locaties en categorieën beheren
+- Tickets volgen en koppelen aan gebruikers
+- Inschrijvingen opvolgen via een many-to-many relatie
+- Bestanden uploaden (zoals eventafbeelding of profielfoto)
+- Statistieken bekijken in een dashboard
+- Gegevens opvragen en verzenden via een publieke API
 
+---
 
-## Router
+## 🧱 Projectstructuur (Base MVC)
 
-Nieuwe pagina's of bereikbare URL's moeten aangemaakt worden via de router class. De routes kunnen aangemaakt worden in `routes.php`
+De applicatie maakt gebruik van een aangepaste **Model View Controller** structuur. Dit zorgt voor gescheiden verantwoordelijkheden en duidelijke organisatie van de code.
 
-Hier bouw je de url op en stuur je deze door naar de desbetreffende controller en een van zijn methods. Variabele elementen in de URL kan je toevoegen via regular expressions.
+| Onderdeel     | Functie                                                       | Locatie                    |
+|---------------|----------------------------------------------------------------|-----------------------------|
+| **Routing**   | Verbindt URL's met de juiste controller/methode               | `/app.php`, `routes.php`   |
+| **Controllers** | Verwerken requests, roepen models aan, tonen views             | `/Controllers/`            |
+| **Models**    | Beheren database-interactie via SQL                            | `/Models/`                 |
+| **Views**     | Bevat HTML-weergave van specifieke content                     | `/views/`                  |
+| **Templates** | Algemene layout van de pagina                                  | `/views/_templates/`       |
 
-bv:
+---
 
-```
-$router->get('/cocktail/(\d+)', 'App\Controllers\CocktailController@detail');
-```
+## 🔀 Routing
 
-> Voor de routing gebruik ik een externe library. 
-> [Meer info over de mogelijkheden kan je terugvinden op de GitHub pagina](https://github.com/bramus/router)
+Routes worden gedefinieerd in `routes.php`. Een route koppelt een URL aan een controller en method.
 
-## Controller
+### Voorbeeld:
 
-Deze controller stuurt dus de request door naar de desbetreffende  method. CocktailController@detail wil dus zeggen dat bij de url http://localhost:8888/cocktail/1 de method `detail` wordt aanroepen in de `CocktailController` met als parameter '1'.
+```php
+$router->get('/event/(\d+)', 'App\Controllers\EventController@detail');
+$router->post('/event/add', 'App\Controllers\EventController@create');
+📂 Controller
+Controllers behandelen de logica: ze verwerken gebruikersinput, halen data op via models en tonen een view.
 
-Een controller staat dus in voor het bekijken van de request en het versturen van de uiteindelijke response.
-
-Je kan hier validatie doen van data afkomstig van de request URI of via een formulier ($_POST).
-Daarnaast kan je ook data ophalen uit cookies of de session.
-
-Afhankelijk van de soort pagina zal de controller dus data moeten ophalen. Bijvoorbeeld via een of meerdere models. Bv: `Cocktail::find($id)`
-
-Met behulp van de views en de nodige data zal de response HTML opgebouwd worden via de method `loadView` uit de `BaseController`.
-
-```
-<?php
-
+EventController.php:
+php
+Copy
+Edit
 namespace App\Controllers;
-use App\Models\Cocktail;
+use App\Models\Event;
 
-class CocktailController extends BaseController {
+class EventController extends BaseController {
 
-    public static function detail ($id) {
-        $cocktail = Cocktail::find($id);
+    public static function detail($id) {
+        $event = Event::find($id);
 
-        self::loadView('/cocktail/detail', [
-            'cocktail' => $cocktail
+        self::loadView('/event/detail', [
+            'event' => $event
         ]);
     }
 
-}
-```
-
-## Model
-
-Een model is een voorstelling van een object uit onze database. In veel gevallen zal een tabel dus een bijhorende model hebben. Indien we een lege model class maken en afleiden van de `BaseModel` dan zitten hier reeds basis methods in zoals `getAll`, `find` of `delete`.
-
-Willen we niet deze standaard methods dan moeten we een nieuwe method aanmaken in deze nieuw aangemaakte model. Wil je een method aanmaken dat bruikbaar is voor alle models dan kan dit in de `BaseModel`.
-
-```
-<?php
-namespace App\Models;
-
-class Cocktail extends BaseModel {
-    public function MijnSpecifiekeMethod() {
-        //eigen code...
+    public static function create() {
+        // Validatie van formuliergegevens ($_POST)
+        // Opslaan via Event model
+        // Redirect naar lijst
     }
 }
-```
+🗃️ Model
+Een model communiceert met de database. Elk model komt meestal overeen met één tabel.
 
-## Views
+Event.php:
+php
+Copy
+Edit
+namespace App\Models;
 
-De view wordt opgeroepen vanuit de Controller of vanuit een andere view. En stelt de html van de pagina voor.
+class Event extends BaseModel {
+    protected static $table = 'events';
 
-Hierin zit enkel de data, niet de volledige html. Deze zit in de template. 
+    public static function find($id) {
+        return self::query("SELECT * FROM events WHERE id = ?", [$id], true);
+    }
 
-Hieronder een voorbeeld van de view `/views/cocktail/detail.php`.
+    public static function getAll() {
+        return self::query("SELECT * FROM events ORDER BY start_date DESC");
+    }
+}
+📄 View
+Views bevatten de HTML-weergave van data. Ze worden opgeroepen vanuit controllers.
 
-```
-<h1><?= $cocktail->name; ?></h1>
-<img src="/images/cocktails/<?= $cocktail->photo; ?>">
-<p><?= $cocktail->description; ?></p>
-```
+/views/event/detail.php:
+php
+Copy
+Edit
+<h1><?= $event->name; ?></h1>
+<img src="/uploads/<?= $event->image; ?>" alt="<?= $event->name; ?>">
+<p><?= $event->description; ?></p>
+<p>Datum: <?= $event->start_date; ?> – <?= $event->end_date; ?></p>
+🧱 Template
+Templates bevatten de algemene layout van de pagina met <html>, <head> en <body>. De variabele $content wordt hierin geladen.
 
-### Layouts
-
-De layout omvat de volledige html structuur met `<head>` en `<body>`. De variabele `$content` wordt vervangen door de inhoud van de view die werd aangeroepen vanuit de controller. En kan je aanpassen in `/views/_layout/main.php`. Je kan bij de loadView als 3e parameter een andere layout meegeven
-
-```
+/views/_templates/main.php:
+php
+Copy
+Edit
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    ...
+  <meta charset="UTF-8">
+  <title>Admin Backoffice</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-    <main>
-        <?= $content; ?>
-    </main>
+  <header>
+    <h1>Backoffice</h1>
+  </header>
+
+  <main>
+    <?= $content; ?>
+  </main>
+
+  <footer>
+    <p>&copy; <?= date('Y'); ?> Event Manager</p>
+  </footer>
 </body>
 </html>
-```
+📊 Functionaliteiten van de Backoffice
+✅ CRUD voor events, locaties, categorieën en gebruikers
+
+✅ Bestand uploaden (event afbeelding, profielfoto gebruiker)
+
+✅ Filemanager om geüploade bestanden te beheren
+
+✅ Dashboard met statistieken via Chart.js
+
+✅ Zoek- en filterfunctie op eventlijst
+
+✅ Dropdowns voor relaties (event ↔ locatie, event ↔ categorie)
+
+✅ Checkbox-lijsten voor many-to-many relaties (user ↔ events)
+
+✅ SQL-injectie preventie via prepared statements
+
+✅ Publieke API:
+
+GET /api/events
+
+POST /api/comments
+
+📊 Dashboard
+Op het dashboard worden twee grafieken weergegeven via Chart.js:
+
+Aantal evenementen per maand
+
+Aantal verkochte tickets per event
+
+🔐 Logingegevens
+Indien van toepassing (gebruik testlogin of admin login)
+
+URL: http://localhost/admin
+
+E-mail: admin@example.com
+
+Wachtwoord: admin123
+
+📂 Screencast
+Een korte video van maximaal 3 minuten toont de belangrijkste functionaliteiten van de backoffice.
+
+📁 Bestand: ./screencast.mp4
+
+🛠️ Gebruikte Technologieën
+PHP (Base MVC structuur)
+
+MySQL database
+
+Composer voor dependency management
+
+Bootstrap (SASS) voor styling
+
+Chart.js voor dashboard visualisaties
+
+Bramus Router voor routing
+
+⚙️ Installatie
+Installeer de nodige dependencies via Composer:
+
+bash
+Copy
+Edit
+ddev composer install
+Start de development server via DDEV of localhost en navigeer naar de adminomgeving.
