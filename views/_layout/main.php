@@ -26,7 +26,7 @@
     </main>
 
     <footer>
-        &copy; <?= date('Y'); ?> - BrandName
+        &copy; <?= date('Y'); ?> - Event Backoffice
     </footer>
 </body>
 

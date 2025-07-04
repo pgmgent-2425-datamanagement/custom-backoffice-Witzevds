@@ -1,2 +1,2 @@
-<h1>Base MVC</h1>
-<p>Welcome to this base mvc project.</p>
+<h1>Events Dashboard</h1>
+<p>Welcome to this Events backoffice</p>
