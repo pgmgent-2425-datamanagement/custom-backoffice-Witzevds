@@ -2,9 +2,7 @@
 
 ## 👤 Studentgegevens
 
-- **Naam:** [Jouw Naam]
-- **Studentnummer:** [Jouw Studentnummer]
-- **Klasgroep:** [Jouw klas]
+- **Naam:** Witze Van der Straeten
 
 ---
 
