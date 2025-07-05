@@ -1,3 +1,5 @@
 <?php
 
-namespace 
+namespace App\Models;
+
+class Event extends Basemodel {}
