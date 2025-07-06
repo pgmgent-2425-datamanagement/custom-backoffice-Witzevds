@@ -18,7 +18,7 @@
         <a href="/">Home</a>
         <a href="/events">Events</a>
         <a href="/users">Users</a>
-        <a href="#">item 4</a>
+        <a href="/locations">locations</a>
     </nav>
 
     <main>
