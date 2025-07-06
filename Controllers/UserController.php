@@ -14,4 +14,19 @@ class UserController extends BaseController
       'users' => $users
     ]);
   }
+
+  public static function view($id)
+  {
+    $user = User::find($id);
+    if (!$user) {
+      self::loadView('errors/404', ['title' => 'User Not Found']);
+      return;
+    }
+    // Haal events op voor deze user
+    $user->events = method_exists($user, 'getEvents') ? $user->getEvents() : [];
+    self::loadView('users/view', [
+      'title' => 'User Details',
+      'user' => $user
+    ]);
+  }
 }

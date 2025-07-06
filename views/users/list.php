@@ -63,16 +63,16 @@ use App\Models\User;
                 <?= date('M j, Y', strtotime($user->created_at ?? 'now')) ?>
               </span>
             </td>
-            <td>
-              <div>
-                <a href="/users/<?= $user->id ?>" title="View User">
-                  view user
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <a href="/users/<?= $user->id ?>" class="btn btn-sm btn-outline" title="View User">
+                  👁️
                 </a>
-                <a href="/users/<?= $user->id ?>/edit" title="Edit User">
-                  edit user
+                <a href="/users/<?= $user->id ?>/edit" class="btn btn-sm btn-outline" title="Edit User">
+                  ✏️
                 </a>
-                <a href="/users/<?= $user->id ?>/events" title="User Events">
-                  user events
+                <a href="/users/<?= $user->id ?>/events" class="btn btn-sm btn-outline" title="User Events">
+                  🎫
                 </a>
               </div>
             </td>
