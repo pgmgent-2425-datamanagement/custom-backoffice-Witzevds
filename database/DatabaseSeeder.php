@@ -4,6 +4,7 @@ require_once __DIR__ . '/seeders/CategoriesSeeder.php';
 require_once __DIR__ . '/seeders/LocationsSeeder.php';
 require_once __DIR__ . '/seeders/UsersSeeder.php';
 require_once __DIR__ . '/seeders/EventsSeeder.php';
+require_once __DIR__ . '/seeders/EventUserSeeder.php';
 
 class DatabaseSeeder
 {
@@ -16,7 +17,8 @@ class DatabaseSeeder
       new CategoriesSeeder(),
       new LocationsSeeder(),
       new UsersSeeder(),
-      new EventsSeeder()
+      new EventsSeeder(),
+      new EventUserSeeder()
     ];
 
     foreach ($seeders as $seeder) {

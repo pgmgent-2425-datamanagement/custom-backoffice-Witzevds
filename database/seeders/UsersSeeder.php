@@ -37,21 +37,6 @@ class UsersSeeder extends Seeder
         'email' => 'charlie.wilson@example.com',
         'profile_picture' => null
       ],
-      [
-        'name' => 'Emma Davis',
-        'email' => 'emma.davis@example.com',
-        'profile_picture' => 'profile6.jpg'
-      ],
-      [
-        'name' => 'Mike Thompson',
-        'email' => 'mike.thompson@example.com',
-        'profile_picture' => null
-      ],
-      [
-        'name' => 'Sarah Connor',
-        'email' => 'sarah.connor@example.com',
-        'profile_picture' => 'profile8.jpg'
-      ]
     ];
 
     $this->insertMultiple('users', $users);
