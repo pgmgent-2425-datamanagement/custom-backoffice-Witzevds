@@ -10,8 +10,6 @@ class EventController extends BaseController
   {
 
     $list = Event::all();
-    print_r($list);
-
     self::loadView('events/list', [
       'title' => "Eventpage",
       'events' => $list

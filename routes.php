@@ -4,3 +4,4 @@
 $router->setNamespace('\App\Controllers');
 $router->get('/', 'HomeController@index');
 $router->get('/events', 'EventController@list');
+$router->get('/users', 'UserController@list');
