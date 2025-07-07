@@ -14,7 +14,7 @@
   </div>
   <div class="form-group">
     <label for="profile_picture">Profile picture (URL of bestandsnaam)</label>
-    <input type="text" name="profile_picture" id="profile_picture" class="form-control" value="<?= htmlspecialchars($user->profile_picture) ?>">
+    <input type="text" name="profile_picture" id="profile_picture" class="form-control" value="<?= htmlspecialchars($user->profile_picture ?? '') ?>">
   </div>
   <button type="submit" class="btn btn-primary">Save Changes</button>
   <a href="/users" class="btn btn-outline">Cancel</a>

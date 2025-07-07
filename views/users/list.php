@@ -66,10 +66,10 @@ use App\Models\User;
             <td class="actions-cell">
               <div class="action-buttons">
                 <a href="/users/<?= $user->id ?>" class="btn btn-sm btn-outline" title="View User">
-                  👁️
+                  View
                 </a>
                 <a href="/users/<?= $user->id ?>/edit" class="btn btn-sm btn-outline" title="Edit User">
-                  ✏️
+                  Edit
                 </a>
                 <form action="/users/<?= $user->id ?>/delete" method="post" style="display:inline;">
                   <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this user?')">Delete</button>

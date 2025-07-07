@@ -10,20 +10,19 @@ function getNameById($arr, $id)
   return $id;
 }
 
-
 ?>
 
 <link rel="stylesheet" href="/css/components.css">
 <link rel="stylesheet" href="/css/events.css">
 
-<div class="events-header">
+<div>
   <h1>📅 Events</h1>
-  <a href="/events/create" class="btn btn-primary">+ Add New Event</a>
+  <a href="/events/create">+ Add New Event</a>
 </div>
 
 <?php if (!empty($events)): ?>
-  <div class="events-list">
-    <table class="events-table">
+  <div>
+    <table>
       <thead>
         <tr>
           <th>Image</th>
@@ -40,21 +39,21 @@ function getNameById($arr, $id)
           <tr>
             <td>
               <?php if (!empty($event->image)): ?>
-                <img src="/uploads/<?= htmlspecialchars($event->image) ?>" alt="<?= htmlspecialchars($event->name) ?>" class="event-thumb">
+                <img src="/uploads/<?= htmlspecialchars($event->image) ?>" alt="<?= htmlspecialchars($event->name) ?>">
               <?php else: ?>
-                <div class="event-thumb-placeholder">📷</div>
+                <div>📷</div>
               <?php endif; ?>
             </td>
-            <td><a href="/events/<?= $event->id ?>" class="event-link"><strong><?= htmlspecialchars($event->name) ?></strong></a></td>
+            <td><a href="/events/<?= $event->id ?>"><strong><?= htmlspecialchars($event->name) ?></strong></a></td>
             <td><?= htmlspecialchars($event->start_date) ?></td>
             <td><?= htmlspecialchars($event->end_date) ?></td>
             <td><?= htmlspecialchars(getNameById($locations, $event->location_id)) ?></td>
             <td><?= htmlspecialchars(getNameById($categories, $event->category_id)) ?></td>
             <td>
-              <a href="/events/<?= $event->id ?>" class="btn btn-sm btn-outline">View</a>
-              <a href="/events/<?= $event->id ?>/edit" class="btn btn-sm btn-secondary">Edit</a>
+              <a href="/events/<?= $event->id ?>">View</a>
+              <a href="/events/<?= $event->id ?>/edit">Edit</a>
               <form action="/events/<?= $event->id ?>/delete" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this event?')">Delete</button>
+                <button type="submit" onclick="return confirm('Delete this event?')">Delete</button>
               </form>
             </td>
           </tr>
@@ -63,9 +62,9 @@ function getNameById($arr, $id)
     </table>
   </div>
 <?php else: ?>
-  <div class="empty-state">
+  <div>
     <h3>No Events Found</h3>
     <p>There are no events in the system yet. Add the first event to get started!</p>
-    <a href="/events/create" class="btn btn-primary">Add First Event</a>
+    <a href="/events/create">Add First Event</a>
   </div>
 <?php endif; ?>
