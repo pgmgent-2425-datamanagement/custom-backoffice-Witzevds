@@ -59,16 +59,14 @@ class BaseModel
         return self::castToModel($db_items);
     }
 
-    private function find(int $id)
+    public static function find(int $id)
     {
-
-        $sql = 'SELECT * FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :p_id';
-        $pdo_statement = $this->db->prepare($sql);
+        $obj = new static;
+        $sql = 'SELECT * FROM `' . $obj->table . '` WHERE `' . $obj->pk . '` = :p_id';
+        $pdo_statement = $obj->db->prepare($sql);
         $pdo_statement->execute([':p_id' => $id]);
-
         $db_item = $pdo_statement->fetchObject();
-
-        return self::castToModel($db_item);
+        return $obj->castToModel($db_item);
     }
 
     protected function castToModel($object)
@@ -105,6 +103,39 @@ class BaseModel
     public function delete()
     {
         $this->deleteById($this->{$this->pk});
+    }
+
+    public static function create(array $data)
+    {
+        $obj = new static;
+        $table = $obj->table;
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($col) => ':' . $col, $columns);
+        $sql = "INSERT INTO `$table` (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
+        global $db;
+        $stmt = $db->prepare($sql);
+        $stmt->execute($data);
+        $id = $db->lastInsertId();
+        return static::find($id);
+    }
+
+    public function save()
+    {
+        $table = $this->table;
+        $pk = $this->pk;
+        $columns = [];
+        $params = [];
+        foreach (get_object_vars($this) as $key => $value) {
+            if ($key === 'table' || $key === 'pk' || $key === 'db') continue;
+            if ($key === $pk) continue; // skip primary key in SET
+            $columns[] = "`$key` = :$key";
+            $params[":$key"] = $value;
+        }
+        $params[":pk"] = $this->{$pk};
+        $sql = "UPDATE `$table` SET " . implode(', ', $columns) . " WHERE `$pk` = :pk";
+        global $db;
+        $stmt = $db->prepare($sql);
+        return $stmt->execute($params);
     }
 
     private function getClassName($classname)
