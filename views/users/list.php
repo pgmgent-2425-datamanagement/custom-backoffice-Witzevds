@@ -74,6 +74,9 @@ use App\Models\User;
                 <a href="/users/<?= $user->id ?>/events" class="btn btn-sm btn-outline" title="User Events">
                   🎫
                 </a>
+                <form action="/users/<?= $user->id ?>/delete" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this user?')">Delete</button>
+                </form>
               </div>
             </td>
           </tr>

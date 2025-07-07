@@ -96,7 +96,7 @@ class BaseModel
     //static method to call like: Model::deleteById(1);
     private function deleteById(int $id)
     {
-        $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $id . '` = :p_id';
+        $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :p_id';
         $pdo_statement = $this->db->prepare($sql);
         return $pdo_statement->execute([':p_id' => $id]);
     }
@@ -104,7 +104,7 @@ class BaseModel
     //public method to call like: $my_model->delete();
     public function delete()
     {
-        $this->deleteById($this->pk);
+        $this->deleteById($this->{$this->pk});
     }
 
     private function getClassName($classname)
