@@ -25,3 +25,4 @@ $router->get('/locations/(\d+)/edit', 'LocationController@edit');
 $router->post('/locations/(\d+)/update', 'LocationController@update');
 $router->post('/locations/(\d+)/delete', 'LocationController@delete');
 $router->get('/tickets', 'TicketController@list');
+$router->get('/dashboard', 'HomeController@dashboard');

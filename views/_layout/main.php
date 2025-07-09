@@ -20,6 +20,7 @@
         <a href="/users">Users</a>
         <a href="/locations">locations</a>
         <a href="/tickets">tickets</a>
+        <a href="/dashboard">dashboard</a>
     </nav>
 
     <main>
