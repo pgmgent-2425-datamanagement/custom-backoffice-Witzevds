@@ -24,6 +24,8 @@ class UserController extends BaseController
     }
     // Haal events op voor deze user
     $user->events = method_exists($user, 'getEvents') ? $user->getEvents() : [];
+    // Haal tickets op voor deze user
+    $user->tickets = method_exists($user, 'getTickets') ? $user->getTickets() : [];
     self::loadView('users/view', [
       'title' => 'User Details',
       'user' => $user
@@ -48,10 +50,19 @@ class UserController extends BaseController
 
   public static function store()
   {
-    // Simpele validatie
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $profile_picture = $_POST['profile_picture'] ?? null;
+    $profile_picture = null;
+    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+      $ext = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
+      $filename = uniqid('profile_') . '.' . $ext;
+      $target = __DIR__ . '/../public/uploads/profiles/' . $filename;
+      if (!is_dir(dirname($target))) {
+        mkdir(dirname($target), 0777, true);
+      }
+      move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target);
+      $profile_picture = $filename;
+    }
     if ($name && $email) {
       User::create([
         'name' => $name,
@@ -89,7 +100,24 @@ class UserController extends BaseController
     }
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $profile_picture = $_POST['profile_picture'] ?? null;
+    $profile_picture = $user->profile_picture; // standaard: huidige afbeelding behouden
+    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
+      // Verwijder oude afbeelding indien aanwezig
+      if ($user->profile_picture) {
+        $oldPath = __DIR__ . '/../public/uploads/profiles/' . $user->profile_picture;
+        if (file_exists($oldPath)) {
+          unlink($oldPath);
+        }
+      }
+      $ext = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
+      $filename = uniqid('profile_') . '.' . $ext;
+      $target = __DIR__ . '/../public/uploads/profiles/' . $filename;
+      if (!is_dir(dirname($target))) {
+        mkdir(dirname($target), 0777, true);
+      }
+      move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target);
+      $profile_picture = $filename;
+    }
     if ($name && $email) {
       $user->name = $name;
       $user->email = $email;

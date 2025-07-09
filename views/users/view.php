@@ -32,3 +32,18 @@ use App\Models\User;
     <li>No events attended.</li>
   <?php endif; ?>
 </ul>
+<p><strong>Tickets in bezit:</strong></p>
+<ul>
+  <?php if (!empty($user->tickets)): ?>
+    <?php foreach ($user->tickets as $ticket): ?>
+      <li>
+        <?= htmlspecialchars($ticket['ticket_code'] ?? '') ?>
+        (voor <a href="/events/<?= $ticket['event_id'] ?? '' ?>">
+          <?= htmlspecialchars($ticket['event_name'] ?? '') ?>
+        </a>, €<?= number_format($ticket['price'] ?? 0, 2, ',', '.') ?>)
+      </li>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <li>Geen tickets in bezit.</li>
+  <?php endif; ?>
+</ul>

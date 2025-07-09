@@ -27,4 +27,18 @@ class User extends BaseModel
     }
     return $events;
   }
+
+  /**
+   * Haal alle tickets die deze user bezit
+   */
+  public function getTickets()
+  {
+    global $db;
+    $sql = 'SELECT t.*, e.name AS event_name FROM tickets t
+            LEFT JOIN events e ON t.event_id = e.id
+            WHERE t.user_id = :user_id';
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['user_id' => $this->id]);
+    return $stmt->fetchAll();
+  }
 }

@@ -19,6 +19,7 @@
         <a href="/events">Events</a>
         <a href="/users">Users</a>
         <a href="/locations">locations</a>
+        <a href="/tickets">tickets</a>
     </nav>
 
     <main>
