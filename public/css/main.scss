@@ -1,3 +1,5 @@
+@use "./scss/pages/home";
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -13,6 +15,9 @@ body {
   & a {
     color: white;
     text-decoration: none;
+  }
+  &:hover {
+    text-decoration: underline;
   }
   &__nav {
     display: flex;

@@ -25,7 +25,6 @@
         </nav>
         <div class="header__profile">
             <a href="/users/<?= $_SESSION['user_id'] ?? '' ?>">
-                <img src="/uploads/profiles/<?= $_SESSION['profile_picture'] ?? 'default.png' ?>" alt="Profile Picture">
                 <?= htmlspecialchars($_SESSION['user_name'] ?? 'Guest') ?>
             </a>
 
@@ -37,9 +36,7 @@
         <?= $content; ?>
     </main>
 
-    <footer>
-        &copy; <?= date('Y'); ?> - Event Backoffice
-    </footer>
+
 </body>
 
 </html>
