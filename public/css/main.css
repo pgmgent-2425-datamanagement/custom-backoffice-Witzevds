@@ -20,6 +20,15 @@
   margin-top: 20px;
 }
 
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
