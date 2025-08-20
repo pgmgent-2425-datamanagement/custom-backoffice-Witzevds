@@ -1,5 +1,13 @@
 @use "./scss/pages/home";
 @use "./scss/pages/dashboard";
+@use "./scss/pages/users";
+@use "./scss/base/lists";
+
+@use "./scss/components/buttons";
+@use "./scss/layout/create-layout.scss";
+@use "./scss/layout/edit-layout.scss";
+@use "./scss/layout/list-layout.scss";
+@use "./scss/components/detail-card";
 
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;

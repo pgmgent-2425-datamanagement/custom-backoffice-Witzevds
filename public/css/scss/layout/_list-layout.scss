@@ -1,0 +1,41 @@
+.list-layout {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  padding: 32px 28px 24px 28px;
+  max-width: 900px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+  & .events-list__card {
+    width: 40%;
+  }
+  & .users-list__card {
+    padding: 1rem;
+    border: solid black 1px;
+    width: 45%;
+    border-radius: 1rem;
+  }
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 8px;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  &__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-between;
+  }
+}
