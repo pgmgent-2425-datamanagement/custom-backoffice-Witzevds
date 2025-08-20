@@ -49,7 +49,14 @@ class TicketController extends BaseController
 
   public static function create()
   {
-    self::loadView('tickets/create', ['title' => 'Add Ticket']);
+    // Haal alle events en users op
+    $events = \App\Models\Event::all();
+    $users = \App\Models\User::all();
+    self::loadView('tickets/create', [
+      'events' => $events,
+      'users' => $users,
+      'title' => 'Add Ticket'
+    ]);
   }
 
   public static function store()
@@ -57,8 +64,9 @@ class TicketController extends BaseController
     $user_id = $_POST['user_id'] ?? null;
     $event_id = $_POST['event_id'] ?? null;
     $price = $_POST['price'] ?? null;
-    $ticket_code = $_POST['ticket_code'] ?? null;
-    if ($user_id && $event_id && $price && $ticket_code) {
+    // Genereer ticket code met uniqid
+    $ticket_code = uniqid('TICKET-');
+    if ($user_id && $event_id && $price) {
       \App\Models\Ticket::create([
         'user_id' => $user_id,
         'event_id' => $event_id,
@@ -67,7 +75,12 @@ class TicketController extends BaseController
       ]);
       self::redirect('/tickets');
     } else {
+      // Haal events en users opnieuw op voor het formulier
+      $events = \App\Models\Event::all();
+      $users = \App\Models\User::all();
       self::loadView('tickets/create', [
+        'events' => $events,
+        'users' => $users,
         'title' => 'Add Ticket',
         'error' => 'All fields are required.'
       ]);
