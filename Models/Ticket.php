@@ -25,4 +25,24 @@ class Ticket extends BaseModel
     }
     return $ticket;
   }
+
+  /**
+   * Haal alle tickets op met eventnaam
+   */
+  public static function allWithEventNames()
+  {
+    global $db;
+    $sql = 'SELECT t.*, e.name AS event_name FROM tickets t LEFT JOIN events e ON t.event_id = e.id';
+    $stmt = $db->query($sql);
+    $rows = $stmt->fetchAll();
+    $tickets = [];
+    foreach ($rows as $row) {
+      $ticket = new self();
+      foreach ($row as $k => $v) {
+        $ticket->$k = $v;
+      }
+      $tickets[] = $ticket;
+    }
+    return $tickets;
+  }
 }

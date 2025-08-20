@@ -15,6 +15,18 @@
     <?php endif; ?>
     <input type="file" name="profile_picture" id="profile_picture" class="form-control" accept="image/*">
     <small>Laat leeg om huidige afbeelding te behouden.</small>
+
+    <div class="form-group">
+      <label><strong>Tickets</strong></label>
+      <?php foreach ($allTickets as $ticket): ?>
+        <label>
+          <input type="checkbox" name="tickets[]" value="<?= $ticket->id ?>"
+            <?= in_array($ticket->id, $userTicketIds) ? 'checked' : '' ?>>
+          <?= htmlspecialchars($ticket->ticket_code) ?> (<?= htmlspecialchars($ticket->event_name) ?>)
+        </label><br>
+      <?php endforeach; ?>
+    </div>
+
     <div class="edit-layout__actions">
       <button type="submit" class="btn btn-primary">Save Changes</button>
       <a href="/users" class="btn btn-outline">Cancel</a>

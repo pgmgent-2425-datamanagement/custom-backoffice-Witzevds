@@ -41,4 +41,16 @@ class User extends BaseModel
     $stmt->execute(['user_id' => $this->id]);
     return $stmt->fetchAll();
   }
+
+  /**
+   * Haal alle ticket-ids van deze user op
+   */
+  public function getTicketIds()
+  {
+    global $db;
+    $sql = 'SELECT id FROM tickets WHERE user_id = :user_id';
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['user_id' => $this->id]);
+    return array_column($stmt->fetchAll(), 'id');
+  }
 }

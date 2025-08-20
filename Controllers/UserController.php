@@ -80,55 +80,62 @@ class UserController extends BaseController
 
   public static function edit($id)
   {
-    $user = User::find($id);
+    $user = \App\Models\User::find($id);
     if (!$user) {
       self::loadView('errors/404', ['title' => 'User Not Found']);
       return;
     }
+    // Haal alle tickets op met eventnaam
+    $allTickets = \App\Models\Ticket::allWithEventNames();
+    // Haal de ticket-ids van deze user op
+    $userTicketIds = $user->getTicketIds();
     self::loadView('users/edit', [
       'title' => 'Edit User',
-      'user' => $user
+      'user' => $user,
+      'allTickets' => $allTickets,
+      'userTicketIds' => $userTicketIds
     ]);
   }
 
   public static function update($id)
   {
-    $user = User::find($id);
+    $user = \App\Models\User::find($id);
     if (!$user) {
       self::loadView('errors/404', ['title' => 'User Not Found']);
       return;
     }
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $profile_picture = $user->profile_picture; // standaard: huidige afbeelding behouden
-    if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
-      // Verwijder oude afbeelding indien aanwezig
-      if ($user->profile_picture) {
-        $oldPath = __DIR__ . '/../public/uploads/profiles/' . $user->profile_picture;
-        if (file_exists($oldPath)) {
-          unlink($oldPath);
-        }
-      }
-      $ext = pathinfo($_FILES['profile_picture']['name'], PATHINFO_EXTENSION);
-      $filename = uniqid('profile_') . '.' . $ext;
-      $target = __DIR__ . '/../public/uploads/profiles/' . $filename;
-      if (!is_dir(dirname($target))) {
-        mkdir(dirname($target), 0777, true);
-      }
-      move_uploaded_file($_FILES['profile_picture']['tmp_name'], $target);
-      $profile_picture = $filename;
+    $profile_picture = $_FILES['profile_picture'] ?? null;
+    $profile_filename = $user->profile_picture;
+    if ($profile_picture && $profile_picture['error'] === UPLOAD_ERR_OK) {
+      $ext = pathinfo($profile_picture['name'], PATHINFO_EXTENSION);
+      $profile_filename = uniqid('profile_', true) . '.' . $ext;
+      $target = __DIR__ . '/../../public/uploads/profiles/' . $profile_filename;
+      move_uploaded_file($profile_picture['tmp_name'], $target);
     }
     if ($name && $email) {
       $user->name = $name;
       $user->email = $email;
-      $user->profile_picture = $profile_picture;
+      $user->profile_picture = $profile_filename;
       $user->save();
-      self::redirect('/users');
+      // Tickets koppelen
+      $ticketIds = $_POST['tickets'] ?? [];
+      global $db;
+      // Verwijder bestaande koppelingen
+      $db->prepare('UPDATE tickets SET user_id = NULL WHERE user_id = :user_id')->execute(['user_id' => $user->id]);
+      // Voeg nieuwe koppelingen toe
+      if (!empty($ticketIds)) {
+        $stmt = $db->prepare('UPDATE tickets SET user_id = :user_id WHERE id = :ticket_id');
+        foreach ($ticketIds as $ticketId) {
+          $stmt->execute(['user_id' => $user->id, 'ticket_id' => $ticketId]);
+        }
+      }
+      self::redirect('/users/' . $user->id);
     } else {
       self::loadView('users/edit', [
-        'title' => 'Edit User',
         'user' => $user,
-        'error' => 'Name and email are required.'
+        'error' => 'All fields are required.'
       ]);
     }
   }
