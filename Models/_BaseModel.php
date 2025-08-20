@@ -6,7 +6,7 @@ namespace App\Models;
 class BaseModel
 {
 
-    protected $table;
+    protected static $table;
     protected $pk;
     protected $db;
 
@@ -21,21 +21,20 @@ class BaseModel
 
     public function __construct()
     {
-
-        if (!isset($this->table)) {
+        if (!isset(static::$table)) {
             $single = strtolower($this->getClassName(get_called_class()));
             switch (substr($single, -1)) {
                 case 'y':
                     //for example: Category model => categories table
-                    $this->table = substr($single, 0, -1) . 'ies';
+                    static::$table = substr($single, 0, -1) . 'ies';
                     break;
                 case 's':
                     //for example: News model => news table
-                    $this->table = $single;
+                    static::$table = $single;
                     break;
                 default:
                     //for example: User model => users table
-                    $this->table .= $single . 's';
+                    static::$table = $single . 's';
             }
         }
         if (!isset($this->pk)) {
@@ -50,7 +49,7 @@ class BaseModel
     private function all()
     {
 
-        $sql = 'SELECT * FROM `' . $this->table . '`';
+        $sql = 'SELECT * FROM `' . static::$table . '`';
         $pdo_statement = $this->db->prepare($sql);
         $pdo_statement->execute();
 
@@ -62,7 +61,7 @@ class BaseModel
     public static function find(int $id)
     {
         $obj = new static;
-        $sql = 'SELECT * FROM `' . $obj->table . '` WHERE `' . $obj->pk . '` = :p_id';
+        $sql = 'SELECT * FROM `' . static::$table . '` WHERE `' . $obj->pk . '` = :p_id';
         $pdo_statement = $obj->db->prepare($sql);
         $pdo_statement->execute([':p_id' => $id]);
         $db_item = $pdo_statement->fetchObject();
@@ -94,7 +93,7 @@ class BaseModel
     //static method to call like: Model::deleteById(1);
     private function deleteById(int $id)
     {
-        $sql = 'DELETE FROM `' . $this->table . '` WHERE `' . $this->pk . '` = :p_id';
+        $sql = 'DELETE FROM `' . static::$table . '` WHERE `' . $this->pk . '` = :p_id';
         $pdo_statement = $this->db->prepare($sql);
         return $pdo_statement->execute([':p_id' => $id]);
     }
@@ -108,7 +107,7 @@ class BaseModel
     public static function create(array $data)
     {
         $obj = new static;
-        $table = $obj->table;
+        $table = static::$table;
         $columns = array_keys($data);
         $placeholders = array_map(fn($col) => ':' . $col, $columns);
         $sql = "INSERT INTO `$table` (" . implode(',', $columns) . ") VALUES (" . implode(',', $placeholders) . ")";
@@ -121,7 +120,7 @@ class BaseModel
 
     public function save()
     {
-        $table = $this->table;
+        $table = static::$table;
         $pk = $this->pk;
         $columns = [];
         $params = [];

@@ -2,4 +2,7 @@
 
 namespace App\Models;
 
-class Category extends BaseModel {}
+class Category extends BaseModel
+{
+    protected static $table = 'categories';
+}

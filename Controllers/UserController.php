@@ -41,6 +41,13 @@ class UserController extends BaseController
     self::redirect('/users');
   }
 
+  public static function deleteAll()
+  {
+    global $db;
+    $db->query('DELETE FROM users');
+    self::redirect('/users');
+  }
+
   public static function create()
   {
     self::loadView('users/create', [

@@ -22,6 +22,7 @@
             <a href="/locations">locations</a>
             <a href="/tickets">tickets</a>
             <a href="/dashboard">dashboard</a>
+            <a href="/categories">Categories</a>
         </nav>
         <div class="header__profile">
             <a href="/users/<?= $_SESSION['user_id'] ?? '' ?>">

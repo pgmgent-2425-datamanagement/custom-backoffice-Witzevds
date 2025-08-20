@@ -139,4 +139,11 @@ class EventController extends BaseController
     }
     self::redirect('/events');
   }
+
+  public static function deleteAll()
+  {
+        global $db;
+        $db->query('DELETE FROM events');
+        self::redirect('/events');
+  }
 }
